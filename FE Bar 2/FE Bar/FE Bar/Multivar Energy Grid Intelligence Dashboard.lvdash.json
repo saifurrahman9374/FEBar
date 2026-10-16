@@ -1,0 +1,1947 @@
+{
+  "datasets": [
+    {
+      "name": "maintenance_priority",
+      "displayName": "Maintenance Priority",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  saifur_fevm_aws_workspace_catalog.multivar_energy.gold_maintenance_priority\n",
+        "ORDER BY\n",
+        "  priority_score DESC\n",
+        "LIMIT 15"
+      ]
+    },
+    {
+      "name": "executive_kpis",
+      "displayName": "Executive KPIs",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  saifur_fevm_aws_workspace_catalog.multivar_energy.gold_executive_kpis"
+      ]
+    },
+    {
+      "name": "asset_health",
+      "displayName": "Asset Health Scores",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  saifur_fevm_aws_workspace_catalog.multivar_energy.gold_asset_health_scores"
+      ]
+    },
+    {
+      "name": "der_optimization",
+      "displayName": "DER Optimization",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  saifur_fevm_aws_workspace_catalog.multivar_energy.gold_der_optimization"
+      ]
+    },
+    {
+      "name": "grid_reliability",
+      "displayName": "Grid Reliability Metrics",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  saifur_fevm_aws_workspace_catalog.multivar_energy.gold_grid_reliability_metrics"
+      ]
+    },
+    {
+      "name": "ml_predictions",
+      "displayName": "ML Failure Predictions",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  saifur_fevm_aws_workspace_catalog.multivar_energy.gold_ml_failure_predictions"
+      ]
+    },
+    {
+      "name": "ml_top20",
+      "displayName": "ML Top 20 Priority",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  saifur_fevm_aws_workspace_catalog.multivar_energy.gold_ml_failure_predictions\n",
+        "ORDER BY\n",
+        "  ml_priority_score DESC\n",
+        "LIMIT 20"
+      ]
+    },
+    {
+      "name": "work_orders",
+      "displayName": "Work Orders",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  saifur_fevm_aws_workspace_catalog.multivar_energy.silver_work_orders"
+      ]
+    },
+    {
+      "name": "outage_events",
+      "displayName": "Outage Events",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  saifur_fevm_aws_workspace_catalog.multivar_energy.silver_outage_events"
+      ]
+    },
+    {
+      "name": "ml_high_risk",
+      "displayName": "ML High Risk Assets",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  saifur_fevm_aws_workspace_catalog.multivar_energy.gold_ml_failure_predictions\n",
+        "WHERE\n",
+        "  ml_risk_label = 'HIGH_RISK'\n",
+        "ORDER BY\n",
+        "  ml_priority_score DESC"
+      ]
+    },
+    {
+      "name": "demand_actual_vs_forecast",
+      "displayName": "Demand Actual vs Forecast",
+      "queryLines": [
+        "SELECT\n",
+        "  reading_date,\n",
+        "  SUM(total_consumption_kwh) AS actual_kwh,\n",
+        "  SUM(forecasted_consumption_kwh) AS forecasted_kwh\n",
+        "FROM\n",
+        "  saifur_fevm_aws_workspace_catalog.multivar_energy.gold_demand_forecast_results\n",
+        "GROUP BY\n",
+        "  reading_date\n",
+        "ORDER BY\n",
+        "  reading_date"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "df3f3745",
+      "displayName": "Executive Overview",
+      "layout": [
+        {
+          "widget": {
+            "name": "header",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# ⚡ Multivar Energy — Grid Intelligence Platform\n",
+                "CIO Executive Dashboard | 20 DSOs | 14 Countries | Agentic AI-Driven Grid Resilience"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "total_assets",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "executive_kpis",
+                  "fields": [
+                    {
+                      "name": "sum(total_assets)",
+                      "expression": "SUM(`total_assets`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Total Grid Assets"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_assets)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_health",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "executive_kpis",
+                  "fields": [
+                    {
+                      "name": "avg(avg_health_score)",
+                      "expression": "AVG(`avg_health_score`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg Health Score"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(avg_health_score)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "renewable_gen",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "executive_kpis",
+                  "fields": [
+                    {
+                      "name": "sum(total_renewable_generation_mw)",
+                      "expression": "SUM(`total_renewable_generation_mw`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Renewable Generation (MW)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_renewable_generation_mw)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_saidi",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "executive_kpis",
+                  "fields": [
+                    {
+                      "name": "avg(avg_saidi_minutes)",
+                      "expression": "AVG(`avg_saidi_minutes`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg SAIDI (minutes)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(avg_saidi_minutes)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "assets_by_country",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "executive_kpis",
+                  "fields": [
+                    {
+                      "name": "country",
+                      "expression": "`country`"
+                    },
+                    {
+                      "name": "sum(total_assets)",
+                      "expression": "SUM(`total_assets`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Assets by Country"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "country",
+                  "displayName": "country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_assets)",
+                  "displayName": "total_assets",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "country",
+                  "displayName": "country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "risk_by_country",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "executive_kpis",
+                  "fields": [
+                    {
+                      "name": "country",
+                      "expression": "`country`"
+                    },
+                    {
+                      "name": "sum(critical_assets)",
+                      "expression": "SUM(`critical_assets`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Critical & High Risk Assets by Country"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "country",
+                  "displayName": "country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(critical_assets)",
+                  "displayName": "critical_assets",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "country",
+                  "displayName": "country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "executive_kpis",
+                  "fields": [
+                    {
+                      "name": "country",
+                      "expression": "`country`"
+                    },
+                    {
+                      "name": "total_assets",
+                      "expression": "`total_assets`"
+                    },
+                    {
+                      "name": "avg_health_score",
+                      "expression": "`avg_health_score`"
+                    },
+                    {
+                      "name": "avg_saifi",
+                      "expression": "`avg_saifi`"
+                    },
+                    {
+                      "name": "avg_saidi_minutes",
+                      "expression": "`avg_saidi_minutes`"
+                    },
+                    {
+                      "name": "total_renewable_generation_mw",
+                      "expression": "`total_renewable_generation_mw`"
+                    },
+                    {
+                      "name": "total_major_events",
+                      "expression": "`total_major_events`"
+                    },
+                    {
+                      "name": "avg_asset_age_years",
+                      "expression": "`avg_asset_age_years`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Executive KPIs by Country"
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "country"
+                  },
+                  {
+                    "fieldName": "total_assets"
+                  },
+                  {
+                    "fieldName": "avg_health_score"
+                  },
+                  {
+                    "fieldName": "avg_saifi"
+                  },
+                  {
+                    "fieldName": "avg_saidi_minutes"
+                  },
+                  {
+                    "fieldName": "total_renewable_generation_mw"
+                  },
+                  {
+                    "fieldName": "total_major_events"
+                  },
+                  {
+                    "fieldName": "avg_asset_age_years"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "asset_health",
+      "displayName": "Asset Health & Maintenance",
+      "layout": [
+        {
+          "widget": {
+            "name": "health_dist",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "asset_health",
+                  "fields": [
+                    {
+                      "name": "health_score",
+                      "expression": "`health_score`"
+                    },
+                    {
+                      "name": "count(health_score)",
+                      "expression": "COUNT(`health_score`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Health Score Distribution"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "health_score",
+                  "displayName": "health_score",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(health_score)",
+                  "displayName": "health_score",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "health_score",
+                  "displayName": "health_score",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "risk_by_type",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "asset_health",
+                  "fields": [
+                    {
+                      "name": "risk_classification",
+                      "expression": "`risk_classification`"
+                    },
+                    {
+                      "name": "asset_category",
+                      "expression": "`asset_category`"
+                    },
+                    {
+                      "name": "count(asset_category)",
+                      "expression": "COUNT(`asset_category`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Risk Classification by Asset Type"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "asset_category",
+                  "displayName": "asset_category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(asset_category)",
+                  "displayName": "asset_category",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "risk_classification",
+                  "displayName": "risk_classification",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "top_maintenance",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "maintenance_priority",
+                  "fields": [
+                    {
+                      "name": "asset_category",
+                      "expression": "`asset_category`"
+                    },
+                    {
+                      "name": "unified_asset_id",
+                      "expression": "`unified_asset_id`"
+                    },
+                    {
+                      "name": "sum(priority_score)",
+                      "expression": "SUM(`priority_score`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Top 15 Maintenance Priority"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "unified_asset_id",
+                  "displayName": "unified_asset_id",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(priority_score)",
+                  "displayName": "priority_score",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "asset_category",
+                  "displayName": "asset_category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 12,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "wo_types",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "work_orders",
+                  "fields": [
+                    {
+                      "name": "count(work_type)",
+                      "expression": "COUNT(`work_type`)"
+                    },
+                    {
+                      "name": "work_type",
+                      "expression": "`work_type`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Work Order Types Distribution"
+              },
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "count(work_type)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "work_type"
+                },
+                "color": {
+                  "fieldName": "work_type",
+                  "displayName": "work_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "cost_by_country",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "asset_health",
+                  "fields": [
+                    {
+                      "name": "country",
+                      "expression": "`country`"
+                    },
+                    {
+                      "name": "sum(total_maintenance_cost_eur)",
+                      "expression": "SUM(`total_maintenance_cost_eur`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Maintenance Cost by Country"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "country",
+                  "displayName": "country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_maintenance_cost_eur)",
+                  "displayName": "total_maintenance_cost_eur",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "country",
+                  "displayName": "country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 10,
+            "width": 6,
+            "height": 5
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "grid_reliability",
+      "displayName": "Grid Reliability",
+      "layout": [
+        {
+          "widget": {
+            "name": "mttr_counter",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "grid_reliability",
+                  "fields": [
+                    {
+                      "name": "avg(mttr_minutes)",
+                      "expression": "AVG(`mttr_minutes`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg MTTR (minutes)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(mttr_minutes)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "total_outages",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "grid_reliability",
+                  "fields": [
+                    {
+                      "name": "sum(outage_count)",
+                      "expression": "SUM(`outage_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Total Outages"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(outage_count)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "major_events",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "grid_reliability",
+                  "fields": [
+                    {
+                      "name": "sum(major_events)",
+                      "expression": "SUM(`major_events`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Major Events"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(major_events)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "saidi_trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "grid_reliability",
+                  "fields": [
+                    {
+                      "name": "dso_id",
+                      "expression": "`dso_id`"
+                    },
+                    {
+                      "name": "monthly(month)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `month`)"
+                    },
+                    {
+                      "name": "avg(saidi_minutes)",
+                      "expression": "AVG(`saidi_minutes`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "SAIDI Trend by Month"
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(month)",
+                  "displayName": "Month",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(saidi_minutes)",
+                  "displayName": "saidi_minutes",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "dso_id",
+                  "displayName": "dso_id",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "saifi_trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "grid_reliability",
+                  "fields": [
+                    {
+                      "name": "dso_id",
+                      "expression": "`dso_id`"
+                    },
+                    {
+                      "name": "monthly(month)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `month`)"
+                    },
+                    {
+                      "name": "avg(saifi)",
+                      "expression": "AVG(`saifi`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "SAIFI Trend by Month"
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(month)",
+                  "displayName": "Month",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(saifi)",
+                  "displayName": "saifi",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "dso_id",
+                  "displayName": "dso_id",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "outage_causes",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "outage_events",
+                  "fields": [
+                    {
+                      "name": "outage_cause",
+                      "expression": "`outage_cause`"
+                    },
+                    {
+                      "name": "count(outage_cause)",
+                      "expression": "COUNT(`outage_cause`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Outage Causes Breakdown"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "outage_cause",
+                  "displayName": "outage_cause",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(outage_cause)",
+                  "displayName": "outage_cause",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "outage_cause",
+                  "displayName": "outage_cause",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "severity_country",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "outage_events",
+                  "fields": [
+                    {
+                      "name": "outage_severity",
+                      "expression": "`outage_severity`"
+                    },
+                    {
+                      "name": "country",
+                      "expression": "`country`"
+                    },
+                    {
+                      "name": "count(country)",
+                      "expression": "COUNT(`country`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Outage Severity by Country"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "country",
+                  "displayName": "country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(country)",
+                  "displayName": "country",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "outage_severity",
+                  "displayName": "outage_severity",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 7,
+            "width": 6,
+            "height": 5
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "renewable_der",
+      "displayName": "Renewable Energy & DER",
+      "layout": [
+        {
+          "widget": {
+            "name": "gen_trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "der_optimization",
+                  "fields": [
+                    {
+                      "name": "der_type",
+                      "expression": "`der_type`"
+                    },
+                    {
+                      "name": "daily(reading_date)",
+                      "expression": "DATE_TRUNC(\"DAY\", `reading_date`)"
+                    },
+                    {
+                      "name": "sum(total_generation_mw)",
+                      "expression": "SUM(`total_generation_mw`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Daily Renewable Generation by DER Type"
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "daily(reading_date)",
+                  "displayName": "Day",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_generation_mw)",
+                  "displayName": "total_generation_mw",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "der_type",
+                  "displayName": "der_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "cap_factor",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "der_optimization",
+                  "fields": [
+                    {
+                      "name": "der_type",
+                      "expression": "`der_type`"
+                    },
+                    {
+                      "name": "avg(avg_capacity_factor)",
+                      "expression": "AVG(`avg_capacity_factor`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg Capacity Factor by DER Type"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "der_type",
+                  "displayName": "der_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(avg_capacity_factor)",
+                  "displayName": "avg_capacity_factor",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "der_type",
+                  "displayName": "der_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "der_status",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "der_optimization",
+                  "fields": [
+                    {
+                      "name": "der_type",
+                      "expression": "`der_type`"
+                    },
+                    {
+                      "name": "sum(online_units)",
+                      "expression": "SUM(`online_units`)"
+                    },
+                    {
+                      "name": "sum(curtailed_units)",
+                      "expression": "SUM(`curtailed_units`)"
+                    },
+                    {
+                      "name": "sum(offline_units)",
+                      "expression": "SUM(`offline_units`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "DER Unit Status by Type"
+              },
+              "version": 3,
+              "mark": {
+                "layout": "stack"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "der_type",
+                  "displayName": "DER Type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "sum(online_units)",
+                      "displayName": "Online"
+                    },
+                    {
+                      "fieldName": "sum(curtailed_units)",
+                      "displayName": "Curtailed"
+                    },
+                    {
+                      "fieldName": "sum(offline_units)",
+                      "displayName": "Offline"
+                    }
+                  ],
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 5,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "demand_forecast",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "demand_actual_vs_forecast",
+                  "fields": [
+                    {
+                      "name": "reading_date",
+                      "expression": "`reading_date`"
+                    },
+                    {
+                      "name": "actual_kwh",
+                      "expression": "`actual_kwh`"
+                    },
+                    {
+                      "name": "forecasted_kwh",
+                      "expression": "`forecasted_kwh`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Demand: Actual vs Forecast (kWh)"
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "reading_date",
+                  "displayName": "Date",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "actual_kwh",
+                      "displayName": "Actual kWh"
+                    },
+                    {
+                      "fieldName": "forecasted_kwh",
+                      "displayName": "Forecasted kWh"
+                    }
+                  ],
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 12,
+            "height": 5
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "ml_predictions",
+      "displayName": "ML Predictions",
+      "layout": [
+        {
+          "widget": {
+            "name": "prob_by_tier",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ml_predictions",
+                  "fields": [
+                    {
+                      "name": "criticality_tier",
+                      "expression": "`criticality_tier`"
+                    },
+                    {
+                      "name": "asset_age_years",
+                      "expression": "`asset_age_years`"
+                    },
+                    {
+                      "name": "ml_failure_probability",
+                      "expression": "`ml_failure_probability`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "ML Failure Probability vs Asset Age"
+              },
+              "version": 3,
+              "widgetType": "scatter",
+              "encodings": {
+                "x": {
+                  "fieldName": "asset_age_years",
+                  "displayName": "Asset Age (years)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "ml_failure_probability",
+                  "displayName": "ML Failure Probability",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "criticality_tier",
+                  "displayName": "Criticality Tier",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "prob_by_asset",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ml_predictions",
+                  "fields": [
+                    {
+                      "name": "criticality_tier",
+                      "expression": "`criticality_tier`"
+                    },
+                    {
+                      "name": "asset_category",
+                      "expression": "`asset_category`"
+                    },
+                    {
+                      "name": "avg(ml_failure_probability)",
+                      "expression": "AVG(`ml_failure_probability`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "ML Failure Probability by Asset Type"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "asset_category",
+                  "displayName": "asset_category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(ml_failure_probability)",
+                  "displayName": "ml_failure_probability",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "criticality_tier",
+                  "displayName": "criticality_tier",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "top20_priority",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ml_top20",
+                  "fields": [
+                    {
+                      "name": "asset_category",
+                      "expression": "`asset_category`"
+                    },
+                    {
+                      "name": "unified_asset_id",
+                      "expression": "`unified_asset_id`"
+                    },
+                    {
+                      "name": "sum(ml_priority_score)",
+                      "expression": "SUM(`ml_priority_score`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Top 20 ML Priority Score Assets"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "unified_asset_id",
+                  "displayName": "unified_asset_id",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(ml_priority_score)",
+                  "displayName": "ml_priority_score",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "asset_category",
+                  "displayName": "asset_category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 12,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "high_risk_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ml_high_risk",
+                  "fields": [
+                    {
+                      "name": "unified_asset_id",
+                      "expression": "`unified_asset_id`"
+                    },
+                    {
+                      "name": "country",
+                      "expression": "`country`"
+                    },
+                    {
+                      "name": "region",
+                      "expression": "`region`"
+                    },
+                    {
+                      "name": "asset_category",
+                      "expression": "`asset_category`"
+                    },
+                    {
+                      "name": "voltage_level",
+                      "expression": "`voltage_level`"
+                    },
+                    {
+                      "name": "criticality_tier",
+                      "expression": "`criticality_tier`"
+                    },
+                    {
+                      "name": "asset_age_years",
+                      "expression": "`asset_age_years`"
+                    },
+                    {
+                      "name": "health_score",
+                      "expression": "`health_score`"
+                    },
+                    {
+                      "name": "ml_failure_probability",
+                      "expression": "`ml_failure_probability`"
+                    },
+                    {
+                      "name": "ml_priority_score",
+                      "expression": "`ml_priority_score`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "High Risk Assets Detail"
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "unified_asset_id"
+                  },
+                  {
+                    "fieldName": "country"
+                  },
+                  {
+                    "fieldName": "region"
+                  },
+                  {
+                    "fieldName": "asset_category"
+                  },
+                  {
+                    "fieldName": "voltage_level"
+                  },
+                  {
+                    "fieldName": "criticality_tier"
+                  },
+                  {
+                    "fieldName": "asset_age_years"
+                  },
+                  {
+                    "fieldName": "health_score"
+                  },
+                  {
+                    "fieldName": "ml_failure_probability"
+                  },
+                  {
+                    "fieldName": "ml_priority_score"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#F0F4F8",
+        "dark": "#0D1117"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FFFFFF",
+        "dark": "#161B22"
+      },
+      "widgetBorderColor": {
+        "light": "#D0D7DE",
+        "dark": "#21262D"
+      },
+      "selectionColor": {
+        "light": "#10B981",
+        "dark": "#10B981"
+      },
+      "visualizationColors": [
+        "#10B981",
+        "#3B82F6",
+        "#06B6D4",
+        "#8B5CF6",
+        "#F59E0B",
+        "#EF4444",
+        "#EC4899",
+        "#14B8A6",
+        "#6366F1",
+        "#84CC16"
+      ],
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED",
+      "widgetPadding": 12,
+      "widgetMargin": 4,
+      "widgetCornerRadius": 8,
+      "widgetShadow": 10,
+      "fontSettings": {
+        "base": {
+          "fontFamily": "Inter",
+          "fontColor": {
+            "light": "#24292F",
+            "dark": "#C9D1D9"
+          }
+        },
+        "widgetTitle": {
+          "fontSize": 14,
+          "fontWeight": 600
+        }
+      },
+      "gridLineColor": {
+        "light": "#E1E4E8",
+        "dark": "#21262D"
+      }
+    },
+    "applyModeEnabled": false
+  }
+}
